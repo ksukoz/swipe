@@ -18,11 +18,24 @@ export default class Deck extends Component {
 		this.state = { panResponder, position };
 	}
 
+	getCardStyle() {
+		const { position } = this.state;
+		const rotate = position.x.interpolate({
+			inputRange: [ -500, 0, 500 ],
+			outputRange: [ '-120deg', '0deg', '120deg' ]
+		});
+
+		return {
+			...position.getLayout(),
+			transform: [ { rotate } ]
+		};
+	}
+
 	renderCards() {
 		return this.props.data.map((item, i) => {
 			if (i === 0) {
 				return (
-					<Animated.View style={this.state.position.getLayout()} {...this.state.panResponder.panHandlers}>
+					<Animated.View key={item.id} style={this.getCardStyle()} {...this.state.panResponder.panHandlers}>
 						{this.props.renderCard(item)}
 					</Animated.View>
 				);
